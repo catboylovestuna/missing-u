@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>to us, cheers</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="window">
+    <div class="title-bar">
+      <span>love_you.exe</span>
+      <div class="close-box">×</div>
+    </div>
+
+    <div class="window-body">
+      <p class="label">times ive missed you</p>
+      <div class="count-display" id="count">...</div>
+      <button id="btn">miss you</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const SUPABASE_URL = 'https://zgysabwuepuftfhxhdma.supabase.co';
+      const SUPABASE_PUBLISHABLE_KEY = 'sb_publishable_2HGNIzYIi4oJQ3Vd__DFUQ_OSd9bh94';
+
+      const supabase = window.supabase.createClient(
+        SUPABASE_URL,
+        SUPABASE_PUBLISHABLE_KEY
+      );
+
+      const countDisplay = document.getElementById('count');
+      const button = document.getElementById('btn');
+
+      let currentCount = 0;
+      let busy = false;
+
+      function displayCount(value) {
+        const number = Number(value);
+
+        if (Number.isFinite(number) && number >= 0) {
+          currentCount = Math.max(currentCount, number);
+          countDisplay.textContent = currentCount.toLocaleString();
+        }
+      }
+
+      async function refreshCount() {
+        try {
+          const { data, error } = await supabase.rpc('get_missed_count');
+          if (error) throw error;
+          displayCount(data);
+        } catch (error) {
+          console.error('Counter loading error:', error);
+          if (countDisplay.textContent === '...') {
+            countDisplay.textContent = 'Error';
+          }
+        }
+      }
+
+      button.addEventListener('click', async () => {
+        if (busy) return;
+
+        busy = true;
+        button.disabled = true;
+
+        const previousCount = currentCount;
+        currentCount += 1;
+        countDisplay.textContent = currentCount.toLocaleString();
+
+        try {
+          const { data, error } = await supabase.rpc('increment_missed_count');
+          if (error) throw error;
+          displayCount(data);
+        } catch (error) {
+          console.error('Counter increment error:', error);
+          currentCount = previousCount;
+          countDisplay.textContent = currentCount.toLocaleString();
+          await refreshCount();
+        } finally {
+          busy = false;
+          button.disabled = false;
+        }
+      });
+
+      refreshCount();
+      setInterval(refreshCount, 5000);
+    });
+  </script>
+
+</body>
+</html>
