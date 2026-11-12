@@ -1,0 +1,105 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>to us, cheers</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <div class="window">
+    <div class="title-bar">
+      <span>love_you.exe</span>
+      <div class="close-box">×</div>
+    </div>
+
+    <div class="window-body">
+      <p class="label">times ive missed you</p>
+      <div class="count-display" id="count">...</div>
+      <button id="btn">miss you</button>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/counterapi/dist/counter.browser.min.js"></script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+      // :(
+      const counter = new Counter({
+        workspace: 'global-counter',
+        accessToken: 'ut_d2UCKASDVDDWwiY69anlM3GNayBFcsu4V7JrcOP3'
+      });
+
+      const counterName = 'missed-count';
+
+      const countDisplay = document.getElementById('count');
+      const button = document.getElementById('btn');
+
+      let currentCount = 0;
+      let busy = false;
+
+      function displayCount(value) {
+        if (Number.isFinite(Number(value))) {
+          currentCount = Math.max(currentCount, Number(value));
+          countDisplay.textContent = currentCount;
+        }
+      }
+
+      
+      async function refreshCount() {
+        try {
+          const result = await counter.get(counterName);
+          displayCount(result.value);
+        } catch (error) {
+          console.error('Counter loading error:', error);
+        }
+      }
+
+      
+      button.addEventListener('click', async () => {
+
+        if (busy) return;
+
+        busy = true;
+        button.disabled = true;
+
+        const previousCount = currentCount;
+
+        
+        currentCount++;
+        countDisplay.textContent = currentCount;
+
+        try {
+          const result = await counter.up(counterName);
+
+          
+          displayCount(result.value);
+
+        } catch (error) {
+          console.error('Counter increment error:', error);
+
+          currentCount = previousCount;
+          countDisplay.textContent = currentCount;
+
+          await refreshCount();
+
+        } finally {
+          busy = false;
+          button.disabled = false;
+        }
+      });
+
+      
+      refreshCount();
+
+      
+      setInterval(refreshCount, 5000);
+
+    });
+  </script>
+
+</body>
+</html>

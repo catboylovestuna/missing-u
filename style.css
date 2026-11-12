@@ -1,0 +1,85 @@
+body {
+  margin: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+    background-image: url("https://i.makeagif.com/media/12-06-2015/B2yRvf.gif");
+    background-size: 150%;
+  font-family: "MS Sans Serif", Tahoma, sans-serif;
+}
+
+.window {
+  width: 300px;
+  background-color: #c0c0c0;
+  border-top: 2px solid #ffffff;
+  border-left: 2px solid #ffffff;
+  border-right: 2px solid #404040;
+  border-bottom: 2px solid #404040;
+  box-shadow: 2px 2px 0px #000000;
+  padding: 3px;
+}
+
+.title-bar {
+  background: linear-gradient(90deg, #000080, #1084d0);
+  color: white;
+  font-weight: bold;
+  font-size: 13px;
+  padding: 4px 6px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.close-box {
+  background-color: #c0c0c0;
+  color: black;
+  width: 16px;
+  height: 14px;
+  font-size: 11px;
+  line-height: 13px;
+  text-align: center;
+  border-top: 1px solid #ffffff;
+  border-left: 1px solid #ffffff;
+  border-right: 1px solid #404040;
+  border-bottom: 1px solid #404040;
+  user-select: none;
+}
+
+.window-body {
+  padding: 20px 15px;
+  text-align: center;
+}
+
+.label {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  color: #000000;
+}
+
+.count-display {
+  font-size: 32px;
+  font-weight: bold;
+  margin: 10px 0 20px 0;
+  color: #000000;
+}
+
+button {
+  background-color: #c0c0c0;
+  font-family: inherit;
+  font-size: 13px;
+  padding: 6px 20px;
+  cursor: pointer;
+  border-top: 2px solid #ffffff;
+  border-left: 2px solid #ffffff;
+  border-right: 2px solid #404040;
+  border-bottom: 2px solid #404040;
+}
+
+button:active {
+  border-top: 2px solid #404040;
+  border-left: 2px solid #404040;
+  border-right: 2px solid #ffffff;
+  border-bottom: 2px solid #ffffff;
+  padding: 7px 19px 5px 21px;
+}
